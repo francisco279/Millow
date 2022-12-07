@@ -19,7 +19,9 @@ function App() {
   const [account,   setAccount] = useState(null); //Account
   const [provider, setProvider] = useState(null); //web3 provider
   const [escrow,     setEscrow] = useState(null); //Escrow contract 
-  const [homes,       setHomes] = useState([]); //Escrow contract 
+  const [homes,       setHomes] = useState([]); //homes array 
+  const [home,         setHome] = useState({}); //individual home
+  const [toggle,     setToggle] = useState(false); //individual home
   //Function to connect to blockchain
   const loadBlockchain = async() =>
   {
@@ -68,6 +70,13 @@ function App() {
     loadBlockchain()
   }, [])
 
+  // Function to select the home with click 
+  const togglePop = (home) => 
+  {
+    setHome(home)
+    toggle ? setToggle(false) : setToggle(true)
+  }
+
   return (
     <div>
 
@@ -82,7 +91,7 @@ function App() {
         <div className='cards'>
           {homes.map((home, index) =>
           (
-            <div className='card' key={index}>
+            <div className='card' key={index} onClick={() => togglePop(home)}>
             <div className='card__image'>
               <img src={home.image} alt='Home'></img>
             </div>
@@ -101,6 +110,9 @@ function App() {
         </div>
 
       </div>
+
+      {/* if toggle is true, then will show the home component*/}
+      {toggle && (<Home home={home} provider={provider} account={account} escrow={escrow} togglePop={togglePop}></Home>)}
 
     </div>
   );
